@@ -1,0 +1,112 @@
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  /api/v1/users:
+    get:
+      summary: List of all users
+      tags:
+        - Users
+      responses:
+        '200':
+          description: Users List
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      summary: Registers a new user
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRegistration'
+      responses:
+        '201':
+          description: Successfully signed up
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    UserRegistration:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+          format: email   # Email format validation
+        password:
+          type: string
+          minLength: 6    # Minimum password length
+        password_confirmation:
+          type: string
+        primary_mobile:
+          type: string
+        secondary_mobile:
+          type: string
+        linkedin_url:
+          type: string
+        experience:
+          type: integer
+        bio:
+          type: string
+        achievements:
+          type: string
+        role:
+          type: string
+      required:
+        - email
+        - password
+        - password_confirmation
+
+    SuccessResponse:
+      type: object
+      properties:
+        message:
+          type: string
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        primary_mobile:
+          type: string
+        secondary_mobile:
+          type: string
+        linkedin_url:
+          type: string
+        experience:
+          type: integer
+        bio:
+          type: string
+        achievements:
+          type: string
