@@ -1,0 +1,13 @@
+# .rubocop.yml
+
+require:
+  - rubocop-rails
+
+AllCops:
+  Include:
+    - app/controllers
+    - app/jobs
+    - app/mailers
+    - app/models
+    - db/migrate
+
