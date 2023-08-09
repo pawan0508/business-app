@@ -1,31 +1,28 @@
-# frozen_string_literal: true
+# app/controllers/api/v1/users/sessions_controller.rb
+
 module Api
   module V1
     module Users
       class SessionsController < Devise::SessionsController
-        # before_action :configure_sign_in_params, only: [:create]
+        respond_to :json
 
-        # GET /resource/sign_in
-        # def new
-        #   super
-        # end
+        def create
+          user = User.find_by(email: params[:email])
 
-        # POST /resource/sign_in
-        # def create
-        #   super
-        # end
+          if user && user.valid_password?(params[:password])
+            token = generate_jwt_token(user)
+            render json: { message: 'Login Successfully', token: token }, status: :created
+          else
+            render json: { error: 'Invalid email or password' }, status: :unprocessable_entity
+          end
+        end
 
-        # DELETE /resource/sign_out
-        # def destroy
-        #   super
-        # end
+        private
 
-        # protected
-
-        # If you have extra params to permit, append them to the sanitizer.
-        # def configure_sign_in_params
-        #   devise_parameter_sanitizer.permit(:sign_in, keys: [:attribute])
-        # end
+        def generate_jwt_token(user)
+          payload = { user_id: user.id, exp: 2.hours.from_now.to_i }
+          JWT.encode(payload, Rails.application.secrets.secret_key_base)
+        end
       end
     end
   end
