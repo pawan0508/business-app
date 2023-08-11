@@ -27,6 +27,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+
   /api/v1/users:
     get:
       summary: List of all users
@@ -66,6 +67,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+
   /api/v1/users/{id}:
     get:
       summary: Get user by ID
@@ -84,13 +86,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-
-    put:
+    patch:
       summary: Update user profile
       tags:
         - Users
       security:
-        - JWT: []        
+        - JWT: []   
       parameters:
         - in: path
           name: id
@@ -116,6 +117,119 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/leads:
+    get:
+      summary: List of all leads
+      tags:
+        - Leads
+      responses:
+        '200':
+          description: Leads List
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      summary: Create a new lead
+      tags:
+        - Leads
+      security:
+        - JWT: []        
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LeadInput'
+      responses:
+        '201':
+          description: Lead Successfully Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeadSuccessResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/leads/{id}:
+    get:
+      summary: Get lead by ID
+      tags:
+        - Leads
+      security:
+        - JWT: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lead details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeadInput'
+
+    patch:
+      summary: Update lead data
+      tags:
+        - Leads
+      security:
+        - JWT: []   
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LeadInput'
+      responses:
+        '200':
+          description: Updated lead details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeadInput'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      summary: Delete lead by ID
+      tags:
+        - Leads
+      security:
+        - JWT: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Delete Lead
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeadInput'
 
 
 components:
@@ -144,6 +258,7 @@ components:
           type: string
         token:
           type: string
+
     UserUpdate:
       type: object
       properties:
@@ -203,11 +318,40 @@ components:
         - password
         - password_confirmation
 
+    LeadInput:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        budget:
+          type: string
+
+        income:
+          type: string
+        status:
+          type: string
+          default: 'published'
+      required:
+        - title
+
+
     SuccessResponse:
       type: object
       properties:
         message:
           type: string
+
+
+    LeadSuccessResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        lead:
+          type: string
+
 
     ErrorResponse:
       type: object

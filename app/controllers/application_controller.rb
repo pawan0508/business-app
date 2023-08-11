@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::API
   
   def current_user
-    current_api_v1_user
+    authenticate_api_v1_user!
   end
 
   def authenticate_user!

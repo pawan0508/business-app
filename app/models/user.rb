@@ -11,6 +11,8 @@ class User < ApplicationRecord
   validates :password, presence: true, length: { minimum: 6 }
   validate :password_confirmation_matches
 
+  has_many :leads
+
   def assign_role(role)
     add_role role if role.present?
   end
