@@ -44,6 +44,7 @@ gem 'rswag-ui'
 gem 'rspec-rails'
 gem 'rubocop', require: false
 gem 'rubocop-rails', require: false
+gem 'jwt'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
